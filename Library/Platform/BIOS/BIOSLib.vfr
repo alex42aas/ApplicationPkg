@@ -1,0 +1,149 @@
+//** @file
+// 
+//**/
+
+#include <Library/Lib/vfrdata.h>
+
+#define FORMSET_GUID  { 0x543cd4ff, 0x1276, 0x443d, 0x41, 0x42, 0x34, 0xc2, 0x32, 0xfe, 0xb2, 0x42 }
+
+formset
+  guid      = FORMSET_BIOS_GUID,
+  title     = STRING_TOKEN(STR_BIOS_TITLE),
+  help      = STRING_TOKEN(STR_BIOS_HELP),
+  classguid = FORMSET_GUID,
+  class     = NON_DEVICE,
+  subclass  = GENERAL_APPLICATION, //GENERAL_APPLICATION,
+  
+  form formid = BIOS_PAGE_ID,
+    title = STRING_TOKEN(STR_BIOS_TITLE);
+    
+    label LABEL_BIOS_LIST_START;
+    label LABEL_BIOS_LIST_END;
+    
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+
+  endform;
+
+  form formid = MII_PAGE_ID,
+    title = STRING_TOKEN(STR_MII_TITLE);
+
+    label LABEL_MII_LIST_START;
+    label LABEL_MII_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = RESTORE_USERS_FROM_USB_PAGE_ID,
+    title = STRING_TOKEN(STR_RECOVER_USERS_FROM_USB_TITLE);
+
+    label LABEL_RECOVER_USERS_FROM_USB_LIST_START;
+    label LABEL_RECOVER_USERS_FROM_USB_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+
+  form formid = USERS_PAGE_ID,
+    title = STRING_TOKEN(STR_USERS_TITLE);
+
+    label LABEL_USERS_LIST_START;
+    label LABEL_USERS_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = HISTORY_PAGE_ID,
+    title = STRING_TOKEN(STR_HISTORY_TITLE);
+
+    label LABEL_HISTORY_LIST_START;
+    label LABEL_HISTORY_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = CERT_CTRL_PAGE_ID,
+    title = STRING_TOKEN(STR_CERT_CTRL_TITLE);
+
+    label LABEL_CERT_CTRL_LIST_START;
+    label LABEL_CERT_CTRL_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = ADM_MAIN_PAGE_ID,
+    title = STRING_TOKEN(STR_ADMIN_MAIN_PAGE_TITLE);
+
+    label LABEL_ADM_MAIN_PAGE_LIST_START;
+    label LABEL_ADM_MAIN_PAGE_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = DATE_TIME_SETUP_PAGE_ID,
+    title = STRING_TOKEN(STR_DATE_TIME_SETUP);
+
+    date
+      questionid  = 0x5100,
+      prompt      = STRING_TOKEN(STR_DATE_PROMPT),
+      help        = STRING_TOKEN(STR_DATE_HELP),
+      flags       = STORAGE_TIME,
+      refresh interval = 100
+
+    enddate;
+
+    time
+
+      questionid  = 0x5101,
+      prompt      = STRING_TOKEN(STR_TIME_PROMPT),
+      help        = STRING_TOKEN(STR_TIME_HELP),
+      flags       = SECOND_SUPPRESS | STORAGE_TIME,
+      refresh interval = 10
+
+    endtime;
+  endform;
+
+  form formid = RECOVER_MODE_PAGE_ID,
+    title = STRING_TOKEN(STR_RECOVER_MODE_PAGE_TITLE);
+
+    label LABEL_RECOVER_MODE_PAGE_LIST_START;
+    label LABEL_RECOVER_MODE_PAGE_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = PCI_DEV_LIST_MODE_PAGE_ID,
+    title = STRING_TOKEN(STR_PCI_DEV_LIST_MODE_PAGE_TITLE);
+
+    label LABEL_PCI_DEV_LIST_MODE_PAGE_LIST_START;
+    label LABEL_PCI_DEV_LIST_MODE_PAGE_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = ADVANCED_MODE_PAGE_ID,
+    title = STRING_TOKEN(STR_ADVANCED_MODE_PAGE_TITLE);
+
+    label LABEL_ADVANCED_MODE_PAGE_LIST_START;
+    label LABEL_ADVANCED_MODE_PAGE_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+
+  form formid = INTEGRITY_PAGE_ID,
+    title = STRING_TOKEN(STR_INTEGRITY_CHECK_TITLE);
+
+    label LABEL_INTEGRITY_LIST_START;
+    label LABEL_INTEGRITY_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+  
+  form formid = DBG_LOAD_PARAMS_PAGE_ID,
+    title = STRING_TOKEN(STR_LOADING_MODULES_PARAMS_TITLE);
+
+    label LABEL_DBG_LOAD_PARAMS_LIST_START;
+    label LABEL_DBG_LOAD_PARAMS_LIST_END;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+  endform;
+
+endformset;

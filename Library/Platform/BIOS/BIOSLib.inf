@@ -1,0 +1,125 @@
+## @file
+# EFI/Framework Emulation Platform with UEFI HII interface supported.
+#
+# The Emulation Platform can be used to debug individual modules, prior to creating
+#    a real platform. This also provides an example for how an DSC is created.
+#
+# Copyright (c) 2006 - 2011, Intel Corporation. All rights reserved.<BR>
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+#/** @file
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Lib
+  FILE_GUID                      = 1792C619-868D-4398-96C2-0887293AB9AC
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = Lib|DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SAL_DRIVER DXE_SMM_DRIVER UEFI_APPLICATION UEFI_DRIVER SMM_CORE
+  EDK_RELEASE_VERSION            = 0x00020000
+  EFI_SPECIFICATION_VERSION      = 0x00020000
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources.common]
+  AdminMainPage.c
+  Lib.vfr
+  MII.c
+  Users.c
+  UsersStorage.c
+  MainPage.c
+  MainPagevfr.vfr
+  strings.uni
+  DateTimePage.c
+  History.c
+  Locks.c
+  PciDevList.c
+  SuperUser.c
+  PlatformCommon.c
+  IntegrityChecking.c
+  LoadingParamsCtrl.c
+  UsersConfig.c
+  UsersCommon.c
+  ..\Common\HistoryStrings.uni
+  ..\Common\HistoryStrings.c 
+  ..\Common\HistoryStrings.h
+  BIOS.c
+  Password.c
+  Password.h
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  CommonPkg/CommonPkg.dec
+  CryptoPkg/CryptoPkg.dec
+  StdLib/StdLib.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec
+  ApplicationPkg/ApplicationPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  UefiLib  
+  PrintLib
+  UefiBootServicesTableLib
+  DeviceManager
+  FsUtilsLib
+  VarStorageUtilsLib
+  BootMngrLib
+  ChipsetConfigLib
+  PciDevsMonitorLib
+  PciDevsDescLib
+  UserManagerLib  
+  BaseMemoryLib
+
+[Guids]
+  gUsersStorageGuid
+  gHistoryStorageGuid
+  gUsrVarGuid
+  gLocksCounterVarGuid
+  gSuPassVarGuid
+  gEfiVarStorageGuid
+  gEfiSignFvGuidedSectionExtractionLiteGuid
+  gUsersConfigVarGuid
+  gLoaderGuid
+
+[Protocols]
+  gSmartCardProtocolGuid
+  gSmartCardReaderProtocolGuid
+  gEfiAcpiSdtProtocolGuid
+  gEfiPciRootBridgeIoProtocolGuid
+  gSetupVarProtocolGuid
+  gEfiLegacyBiosProtocolGuid
+  gEfiSimpleTextOutProtocolGuid
+  gOpenSSLProtocolGuid  
+  gActivationKeyProviderProtocolGuid
+  gDrmHelperProtocolGuid
+  gIniParserDxeProtocolGuid                 ## CONSUMES
+  gGlobalConfigProtocolGuid                 ## CONSUMES
+  gBiosLogProtocolGuid                      ## CONSUMES
+  gCurrentUserInfoProtocolGuid              ## CONSUMES
+
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize
+  gEfiApplicationPkgTokenSpaceGuid.PcdUsersStorageMaxSize
+  gEfiApplicationPkgTokenSpaceGuid.UseLdapAuth
+  gEfiApplicationPkgTokenSpaceGuid.bDisableCheckOSComponents
+  gEfiApplicationPkgTokenSpaceGuid.PcdRtcRstGuid
+  gEfiApplicationPkgTokenSpaceGuid.PcdUsersConfigFile
+  gEfiApplicationPkgTokenSpaceGuid.bEnableRtcRst
+  gEfiCommonPkgTokenSpaceGuid.PcdCertificateStorageMaxSize
+
+[BuildOptions]
+#MSFT:*_*_*_CC_FLAGS = /FAcs

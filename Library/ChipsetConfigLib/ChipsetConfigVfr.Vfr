@@ -1,0 +1,30 @@
+///** @file
+//  
+// BootManager formset.
+//  
+//**/
+
+#define FORMSET_GUID  { 0x543cd5fe, 0x1276, 0x443d, 0x41, 0x42, 0x34, 0xc2, 0x32, 0xef, 0xa1, 0xe4 }
+
+#define CHIPSET_CONFIG_FORM_ID     0xCC00
+
+#define LABEL_BOOT_OPTION        0x00
+#define LABEL_BOOT_OPTION_END    0x01
+
+formset
+  guid      = FORMSET_GUID,
+  title     = STRING_TOKEN(STR_CC_BANNER),
+  help      = STRING_TOKEN(STR_LAST_STRING),
+  classguid = FORMSET_GUID,
+  class     = NON_DEVICE,
+  subclass  = SETUP_APPLICATION,
+
+  form formid = CHIPSET_CONFIG_FORM_ID,
+       title  = STRING_TOKEN(STR_CC_BANNER);
+
+    label LABEL_BOOT_OPTION;
+    label LABEL_BOOT_OPTION_END;
+
+  endform;
+
+endformset;

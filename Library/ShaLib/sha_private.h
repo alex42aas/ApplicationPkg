@@ -1,0 +1,43 @@
+/** @file
+
+  Copyright (c) 2008 - 2011, Intel Corporation. All rights reserved.<BR>
+  This program and the accompanying materials
+  are licensed and made available under the terms and conditions of the BSD License
+  which accompanies this distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
+
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+**/
+
+/*************************** sha-private.h ***************************/
+/********************** See RFC 4634 for details *********************/
+#ifndef _SHA_PRIVATE__H
+#define _SHA_PRIVATE__H
+/*
+ * These definitions are defined in FIPS-180-2, section 4.1.
+ * Ch() and Maj() are defined identically in sections 4.1.1,
+ * 4.1.2 and 4.1.3.
+ *
+ * The definitions used in FIPS-180-2 are as follows:
+ */
+
+#ifndef USE_MODIFIED_MACROS
+#define SHA_Ch(x,y,z)        (((x) & (y)) ^ ((~(x)) & (z)))
+#define SHA_Maj(x,y,z)       (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
+
+#else /* USE_MODIFIED_MACROS */
+/*
+ * The following definitions are equivalent and potentially faster.
+ */
+
+#define SHA_Ch(x, y, z)      (((x) & ((y) ^ (z))) ^ (z))
+#define SHA_Maj(x, y, z)     (((x) & ((y) | (z))) | ((y) & (z)))
+
+
+#endif /* USE_MODIFIED_MACROS */
+
+#define SHA_Parity(x, y, z)  ((x) ^ (y) ^ (z))
+
+#endif /* _SHA_PRIVATE__H */

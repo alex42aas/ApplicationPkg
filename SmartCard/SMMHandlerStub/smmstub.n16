@@ -1,0 +1,261 @@
+segment .data
+segment .text
+
+%define ABSADR(X) X
+%define PORTSC(X) (((X) << 2) + 0x44)
+%define TYPE_OHCI 1
+org 0x8000
+BITS 16
+ 	 						; Core 0 enter
+    mov  bl,0
+    jmp  start
+
+
+TIMES 0x400 - 	($-$$) db 0x90
+
+    mov  bl,1   			; Core 1 enter
+    jmp exit
+
+TIMES 0x800 - 	($-$$) db 0x90
+
+;;  0-7      NSD port N 
+;;  8-9      Controller Type 00 - EHCI 01 - OHCI 10/11 - Reserved
+;;  10 - 30  reserved 
+;;  31       NSD status  1 - on 0 - off      
+
+smm_nsd_flags        dd 0  ;; Address SMM_START + 400*NCPU 
+
+;  Ohci device address for NSD 
+;  Bits 00..07  Register
+;  Bits 08..10  Function
+;  Bits 11..15  Device
+;  Bits 16..23  Bus
+smm_nsd_hc_address   dd 0  ;; 
+smm_entry            dq 0  ;;
+
+%include "smmcom.inc"
+%include "sb600.inc"
+
+print_dd:
+   rol ecx,8
+   TTY_BYTE cl
+   rol ecx,8
+   TTY_BYTE cl
+   rol ecx,8
+   TTY_BYTE cl
+   rol ecx,8
+   TTY_BYTE cl
+   TTY_AL 13
+   TTY_AL 10
+ret
+
+print_crlf:
+   TTY_AL 13
+   TTY_AL 10
+ret
+
+start:
+    SMM_LOCKW smmlock
+    cmp al, 0
+    jnz exit
+    mov ax,cs
+    mov ss,ax
+    xor ax,ax
+    mov al,bl ; CPU NUM
+    inc bl
+    shl eax,10 ; *400
+    add ax, stack 
+    mov sp, ax
+
+    xor ecx,ecx
+    mov cx,ax
+    call print_dd
+    mov cx,cs
+    call print_dd
+    
+    ;; check controller type
+    mov eax, [cs:smm_nsd_flags]
+    shr eax, 8 ;  
+    and al, 3
+    cmp al, TYPE_OHCI
+    jz  ohci_start
+
+    mov cx, PCI_DEV(0,19,5,0x64) ; USBLEGSTS
+    call read_confd
+    mov ecx, eax
+    call print_dd     
+    mov cx, PCI_DEV(0,19,5,0x10) ; EHCI_BAR
+    call read_confd
+    mov ecx, eax
+    call print_dd     
+    mov cx, PCI_DEV(0,19,5,0x0) ; ID
+    call read_confd
+    mov ecx, eax
+    call print_dd     
+    
+    mov cx, PCI_DEV(0,19,5,0x10) ; EHCI bar
+    call read_confd
+    xor ecx, ecx
+
+    a32 mov cl, [eax]      ; Add CAPLENGTH - offset to 
+    add eax, ecx           ;   Operational Register Space (EHCI_EOR) default 0x20
+    mov edi, eax           ; edi - EHCI_EOR
+    mov [cs:ehci_eor], edi
+    a32 mov eax, [edi+4]   ; get USBSTS
+    
+    mov [cs:usbsts], eax
+
+    ;; Print EHCI_EOR
+    mov ecx, edi   
+    call print_dd
+
+    ;; Print Status
+    mov ecx, [cs:usbsts]   
+    call print_dd
+    
+    mov eax, [cs:usbsts] 
+    test eax, (1<<0)
+    jz .l1
+    TTY_STRING 'UI '
+.l1:
+    mov  eax, [cs:usbsts] 
+    test eax, (1<<1)
+    jz .l2
+    TTY_STRING 'UEI '
+.l2:
+    mov  eax, [cs:usbsts] 
+    test eax, (1<<2)
+    jz .l3
+    TTY_STRING 'PC '
+.l3:
+    mov  eax, [cs:usbsts] 
+    test eax, (1<<3)
+    jz .l4
+    TTY_STRING 'FRL '
+.l4:
+    mov  eax, [cs:usbsts] 
+    test eax, (1<<4)
+    jz .l5
+    TTY_STRING 'HSE '
+.l5:
+    mov  eax, [cs:usbsts] 
+    test eax, (1<<5)
+    jz .l6
+    TTY_STRING 'IAA '
+.l6:
+    call print_crlf
+%if 1 
+    a32 mov ecx, [edi+PORTSC(0)]
+    call print_dd
+    a32 mov ecx, [edi+PORTSC(1)]
+    call print_dd
+    a32 mov ecx, [edi+PORTSC(2)]
+    call print_dd
+    a32 mov ecx, [edi+PORTSC(3)]
+    call print_dd
+    a32 mov ecx, [edi+PORTSC(4)]
+    call print_dd
+    a32 mov ecx, [edi+PORTSC(5)]
+    call print_dd
+    call print_crlf
+%endif
+;    TTY_STRING 'FLAG '
+    mov ecx, [cs:smm_nsd_flags]
+    call print_dd
+    call print_crlf
+
+    mov ecx, [cs:smm_nsd_flags]
+    test ecx, (1<<31)
+    jz skip_nsdcheck
+    xor eax,eax
+    mov al,cl
+    shl al, 2          ; PORTN * 4
+    add al, 0x44       ; PORTSC(0) offset
+    add eax,edi        ; EHCI_EOR
+    a32 mov ecx, [eax] ; get port status
+
+
+    mov esi, ecx       ; save port status    
+    call print_dd
+    call print_crlf
+    mov ecx, esi
+
+    test ecx,1         ; test port connect status
+    jnz skip_nsdcheck
+    ; XXX
+    test ecx,0x2000     ; change owner status hack for vista setup
+    jnz skip_nsdcheck
+nsd: 
+    ; XXX
+    ; NSD !!!
+    TTY_STRING 'NSD !!!'
+    call print_crlf
+    PM_READ8 0x23      ; Read AcpiPm1CntBlkHi
+    mov ch,al
+    PM_READ8 0x22      ; Read AcpiPm1CntBlkLo
+    mov cl,al
+    mov dx, cx
+    in ax, dx
+    and ax, ~(0xf<<10) ; clear bits 10,11,12,13
+
+%define BM_RLD   (1<<1) 
+%define SLP_EN   (1<<13)
+%define SLP_TYP5 (5<<10)
+    and ax, ~BM_RLD  ;
+
+    or  ax, SLP_EN | SLP_TYP5
+    out dx, ax
+.halt:
+    jmp .halt
+skip_nsdcheck:
+    mov eax, [cs:usbsts]
+    a32 mov [edi+4], eax   ; clear it
+
+    SMM_UNLOCK smmlock
+    RESET_PM_STATUS
+    SMI_EOS
+exit:
+    mov eax, 0xfee000B0 ; LAPIC EOI
+    mov dword [eax], 1
+    rsm
+
+;; 
+;;  OHCI support 
+;;
+;;
+
+%define HcRhPortStatus 0x54
+
+ohci_start:
+	mov ecx, [cs:smm_nsd_hc_address]
+	mov eax, [cs:smm_nsd_flags]
+	and al, 0xff
+	dec al       ; Port - 1
+	shl eax, 2   ; Port * 4
+	or  ecx, HcRhPortStatus
+	add ecx, eax
+	
+	mov edi, ecx ; Save HcRhPortStatus address to edi
+	call print_dd 
+	mov ecx, edi ;
+	call read_confd
+	push eax
+	mov ecx, eax	
+	call print_dd
+	pop  eax
+	test eax, 1 
+	jz nsd
+	
+    	SMM_UNLOCK smmlock
+	RESET_PM_STATUS
+    	SMI_EOS
+	jmp exit
+
+align 16
+ehci_eor dd 0
+usbsts:  dd 0
+smmlock  db 0
+
+align 32
+stack:
+

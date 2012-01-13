@@ -1,0 +1,87 @@
+## @file
+# EFI/Framework Emulation Platform with UEFI HII interface supported.
+#
+# The Emulation Platform can be used to debug individual modules, prior to creating
+#    a real platform. This also provides an example for how an DSC is created.
+#
+# Copyright (c) 2006 - 2011, Intel Corporation. All rights reserved.<BR>
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+#/** @file
+# Athena driver
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = AthenaDxe
+  FILE_GUID                      = 345E68C1-9E2F-3457-8019-44E14C713123
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = AthenaCcidDriverBindingEntryPoint
+
+
+[Sources.common]
+  AthenaDxe.c
+  ComponentName.c
+  ../eTokenDxe/eToken.c
+  ../eTokenDxe/Apdu.c
+  ../eTokenDxe/eTokenPro.c
+  ../eTokenDxe/eTokenJava.c
+  ../eTokenDxe/eTokenJava.h
+  AthenaVfrData.h 
+  AthenaVfr.vfr 
+  VfrStrings.uni
+  
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  CryptoPkg/CryptoPkg.dec
+  ApplicationPkg/ApplicationPkg.dec
+
+[LibraryClasses]
+  MemoryAllocationLib
+  UefiLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+  BaseMemoryLib
+  ReportStatusCodeLib
+  DebugLib
+  PcdLib
+  UefiUsbLib
+  TimerLib
+  CcidLib
+  PcdLib
+  HiiLib
+
+[Guids]
+  ##
+  # Event registered to EFI_HII_SET_KEYBOARD_LAYOUT_EVENT_GUID group,
+  # which will be triggered by EFI_HII_DATABASE_PROTOCOL.SetKeyboardLayout().
+  #
+  gEfiHiiKeyBoardLayoutGuid                     ## SOMETIME_CONSUMES  ## Event
+  gEfiIfrTianoGuid
+
+[Protocols]
+  gEfiUsbIoProtocolGuid                         ## TO_START
+  gEfiDevicePathProtocolGuid                    ## TO_START
+  gSmartCardReaderProtocolGuid
+  gSmartCardProtocolGuid
+  gEfiPciIoProtocolGuid
+  gEfiHiiConfigAccessProtocolGuid
+  gOpenSSLProtocolGuid
+
+[Pcd]
+  gEfiMdePkgTokenSpaceGuid.PcdUsbTransferTimeoutValue
+  gEfiApplicationPkgTokenSpaceGuid.PcdOpensslConfigFile
+  
+

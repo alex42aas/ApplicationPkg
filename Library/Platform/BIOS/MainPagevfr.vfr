@@ -1,0 +1,27 @@
+//** @file
+// 
+
+#include <Library/Lib/vfrdata.h>
+
+formset
+  guid     = FORMSET_MAIN_PAGE_GUID,
+  title    = STRING_TOKEN(STR_MAIN_PAGE_TITLE),
+  help     = STRING_TOKEN(STR_NULL_STRING),
+  classguid = FORMSET_MAIN_PAGE_GUID,
+  class    = NON_DEVICE,
+  subclass = FRONT_PAGE,
+
+  form formid = MAIN_PAGE_ID,
+    title = STRING_TOKEN(STR_MAIN_PAGE_TITLE);
+    
+    banner
+      title = STRING_TOKEN(STR_MAIN_PAGE_TITLE),
+      line  0,
+      align right;
+
+    label LABEL_MAIN_PAGE_LIST_START;
+    label LABEL_MAIN_PAGE_LIST_END;
+
+  endform;
+
+endformset;

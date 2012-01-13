@@ -1,0 +1,39 @@
+///** @file
+//  
+// BootManager formset.
+//  
+//**/
+
+#define FORMSET_GUID  { 0x543cd5fe, 0x1276, 0x443d, 0x41, 0x42, 0x34, 0xc2, 0x32, 0xef, 0xa1, 0xe4 }
+
+#define BOOT_MANAGER_FORM_ID     0x1000
+#define BOOT_MENU_FORM_ID        0x3000 
+
+#define LABEL_BOOT_OPTION        0x00
+#define LABEL_BOOT_OPTION_END    0x01
+
+formset
+  guid      = FORMSET_GUID,
+  title     = STRING_TOKEN(STR_BM_BANNER_TMP),
+  help      = STRING_TOKEN(STR_LAST_STRING),
+  classguid = FORMSET_GUID,
+  class     = NON_DEVICE,
+  subclass  = GENERAL_APPLICATION, //SETUP_APPLICATION,
+
+  form formid = BOOT_MENU_FORM_ID,
+    title  = STRING_TOKEN(STR_BOOT_OPTION_BANNER);
+
+    label LABEL_BOOT_OPTION;
+    label LABEL_BOOT_OPTION_END;
+
+  endform;
+
+  form formid = BOOT_MANAGER_FORM_ID,
+    title  = STRING_TOKEN(STR_BM_BANNER);
+
+    label LABEL_BOOT_OPTION;
+    label LABEL_BOOT_OPTION_END;
+
+  endform;  
+
+endformset;

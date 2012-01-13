@@ -1,0 +1,187 @@
+/** @file
+
+  Copyright (c) 2008 - 2011, Intel Corporation. All rights reserved.<BR>
+  This program and the accompanying materials
+  are licensed and made available under the terms and conditions of the BSD License
+  which accompanies this distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
+
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+**/
+
+#ifndef __ADV__MENU__HANDLER__PROTO__H
+#define __ADV__MENU__HANDLER__PROTO__H
+
+
+#include <Library/BaseLib.h>
+#include <MultibootDesc.h>
+#include <Protocol/HiiConfigAccess.h>
+#include <Protocol/HiiDatabase.h>
+#include <Library/AdvMenu/AdvMenuStrings.h>
+
+#define EFI_BROWSER_ACTION_REQUEST_GOTO    (EFI_BROWSER_ACTION_REQUEST_EXIT + 1)
+
+#define ADV_MENU_HANDLER_PROTOCOL_GUID \
+  { \
+    0x76a1129, 0x7f98, 0x4332, {0xb1, 0x93, 0x8, 0xc4, 0x2d, 0x9, 0x38, 0x99} \
+  }
+
+#define ADV_MENU_FORM_GUID \
+  { \
+    0x36966354, 0xF3F3, 0x4c39, {0xA9, 0x84, 0xA2, 0x40, 0x41, 0x5A, 0x8E, 0x57}\
+  }
+
+typedef struct _ADV_MENU_HANDLER_PROTOCOL ADV_MENU_HANDLER_PROTOCOL;
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_HANDLER_SETUP_CFG_DATA)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN MULTIBOOT_CONFIG *MbCfg,
+  IN EFI_HII_HANDLE HiiHandle
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_HANDLER_SHOW_MENU)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN OPTIONAL EFI_GUID *FormGuid
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_HANDLER_INTERNAL_CALLBACK)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN CONST EFI_HII_CONFIG_ACCESS_PROTOCOL *HiiCfgAccess,
+  IN EFI_BROWSER_ACTION Action,
+  IN EFI_QUESTION_ID QuestionId,
+  IN UINT8 Type,
+  IN EFI_IFR_TYPE_VALUE *Value,
+  OUT EFI_BROWSER_ACTION_REQUEST *ActionRequest
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_CALLBACK_LITE)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN EFI_QUESTION_ID QuestionId
+  );
+
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_CALLBACK)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN EFI_BROWSER_ACTION Action,
+  IN EFI_QUESTION_ID QuestionId,
+  IN UINT8 Type,
+  IN EFI_IFR_TYPE_VALUE *Value,
+  OUT EFI_BROWSER_ACTION_REQUEST *ActionRequest
+  );
+
+typedef
+EFI_HII_HANDLE
+(EFIAPI *ADV_MENU_GET_HII_HANDLE)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_REGISTER_ACTION_CALLBACK)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN ADV_MENU_CALLBACK ActionCallback
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_REGISTER_START_CALLBACK)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN ADV_MENU_CALLBACK StartCallback
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_REGISTER_EXIT_CALLBACK)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN ADV_MENU_CALLBACK ExitCallback
+  );
+  
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_SELECT_FORM_BY_GUID)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN EFI_GUID *FormGuid
+  );
+
+typedef
+EFI_GUID*
+(EFIAPI *ADV_MENU_GET_CURRENT_GUID)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN EFI_GUID *FormGuid
+  );
+  
+typedef
+BOOLEAN
+(EFIAPI *ADV_MENU_IS_GOTO_ACTION)(
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This
+  );
+  
+typedef
+EFI_STRING_ID
+(EFIAPI *ADV_MENU_GET_STRING_ID) (
+  IN STRING_NUM
+  );
+  
+typedef
+VOID
+(EFIAPI *ADV_MENU_SET_STRING_ID_LIST) (
+  IN EFI_STRING_ID *idList
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_SET_TOKEN_STR_BY_QID) (
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN EFI_QUESTION_ID QuestionId,
+  IN CHAR16 *TokenStr
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *ADV_MENU_GET_TOKEN_STR_BY_QID) (
+  IN CONST ADV_MENU_HANDLER_PROTOCOL *This,
+  IN EFI_QUESTION_ID QuestionId,
+  OUT CHAR16 **TokenStr
+  );
+
+struct _ADV_MENU_HANDLER_PROTOCOL {
+  ADV_MENU_HANDLER_SETUP_CFG_DATA    SetupCfgData;
+  ADV_MENU_HANDLER_SHOW_MENU         ShowMenu;
+  ADV_MENU_HANDLER_INTERNAL_CALLBACK InternalCallback;
+  ADV_MENU_GET_HII_HANDLE            GetHiiHandle;
+  
+  ADV_MENU_REGISTER_START_CALLBACK   RegStartCallback;
+  ADV_MENU_REGISTER_ACTION_CALLBACK  RegActionCallback;
+  ADV_MENU_REGISTER_EXIT_CALLBACK    RegExitCallback;
+  
+  ADV_MENU_SELECT_FORM_BY_GUID       SelectFormByGuid;
+  ADV_MENU_GET_CURRENT_GUID          GetCurrentFormGuid;
+  
+  ADV_MENU_IS_GOTO_ACTION            IsGotoAction;
+  
+  ADV_MENU_SET_STRING_ID_LIST        SetStringIdList;
+  ADV_MENU_GET_STRING_ID             GetStringId;
+  
+  ADV_MENU_SET_TOKEN_STR_BY_QID      SetTokenStrForEntryByQuestionTd;
+  ADV_MENU_GET_TOKEN_STR_BY_QID      GetTokenStrForEntryByQuestionTd;
+  
+};
+
+
+extern EFI_GUID gAdvMenuHandlerProtocolGuid;
+
+
+#endif /* #ifndef __ADV__MENU__HANDLER__PROTO__H */
+

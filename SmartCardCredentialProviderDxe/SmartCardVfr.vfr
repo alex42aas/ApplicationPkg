@@ -1,0 +1,71 @@
+///** @file
+//  
+//    Browser formset.
+//  
+//  Copyright (c) 2004 - 2008, Intel Corporation. <BR>
+//  All rights reserved. This program and the accompanying materials
+//  are licensed and made available under the terms and conditions of the BSD License
+//  which accompanies this distribution.  The full text of the license may be found at
+//  http://opensource.org/licenses/bsd-license.php
+//  
+//  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+//  
+//**/
+
+#include "vfrdata.h"
+
+#define FORMSET_GUID  { 0x543cd4ff, 0x1276, 0x443d, 0x41, 0x42, 0x34, 0xc2, 0x32, 0xfe, 0xb2, 0x42 }
+
+#define FRONT_PAGE_FORMSET_GUID \
+  { \
+    0x9e0c30bc, 0x3f06, 0x4ba6, {0x82, 0x88, 0x9, 0x17, 0x9b, 0x85, 0x5d, 0xbe} \
+  }
+
+#define FRONT_PAGE_FORM_ID             0x1000
+
+#define LABEL_BOOT_OPTION        0x00
+#define LABEL_BOOT_OPTION_END    0x01
+
+#define USBKEY_PROVIDER_CLASS       0x00
+#define USBKEY_PROVIDER_SUBCLASS    0x00
+
+formset
+  guid      = FORMSET_GUID,
+  title     = STRING_TOKEN(STR_USBKEY_FSTITLE),
+  help      = STRING_TOKEN(STR_USBKEY_FSHELP),
+  classguid = FORMSET_GUID,
+  class     = NON_DEVICE,
+  subclass  = GENERAL_APPLICATION,
+
+ varstore USBKEY_CONFIG,       // Define referenced name in vfr
+    name      = MyIfrData,     // 
+    guid      = FORMSET_GUID;  // 
+
+  form formid = USBKEY_MANAGER_FORM_ID,
+    title = STRING_TOKEN(STR_USBKEY_BANNER);
+
+     goto USBKEY_MANAGER_FORM_ID,
+              prompt = STRING_TOKEN(STR_USBKEY_PORT1),
+              help = STRING_TOKEN(STR_PASSWORD_HELP),
+              flags = INTERACTIVE,
+              key = 0x2000;
+
+     goto USBKEY_MANAGER_FORM_ID,
+              prompt = STRING_TOKEN(STR_USBKEY_PORT2),
+              help = STRING_TOKEN(STR_PASSWORD_HELP),
+              flags = INTERACTIVE,
+              key = 0x2001;
+
+
+    //
+    // This is where we will dynamically add choices for the Boot Manager
+    //
+    label LABEL_BOOT_OPTION;
+    label LABEL_BOOT_OPTION_END;
+
+//    subtitle text = STRING_TOKEN(STR_USBKEY_FORMSET_HELP);
+
+  endform;
+
+endformset;

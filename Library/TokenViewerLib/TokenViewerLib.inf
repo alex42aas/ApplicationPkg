@@ -1,0 +1,67 @@
+## @file
+# EFI/Framework Emulation Platform with UEFI HII interface supported.
+#
+# The Emulation Platform can be used to debug individual modules, prior to creating
+#    a real platform. This also provides an example for how an DSC is created.
+#
+# Copyright (c) 2006 - 2011, Intel Corporation. All rights reserved.<BR>
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+#/** @file
+# TokenViewerLib.inf
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = TokenViewerLib
+  FILE_GUID                      = b789ef84-55c3-4ce5-b726-c52cb366574d
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = TokenViewerLib|DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SAL_DRIVER DXE_SMM_DRIVER UEFI_APPLICATION UEFI_DRIVER
+  EDK_RELEASE_VERSION            = 0x00020000
+  EFI_SPECIFICATION_VERSION      = 0x00020000
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources.common]
+  AdvTokenViewerMenu.c
+  TokenViewer.c
+  TokenViewerInternals.c
+  TokenViewerInternals.h
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  CryptoPkg/CryptoPkg.dec
+  CommonPkg/CommonPkg.dec
+  ApplicationPkg/ApplicationPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  UefiLib  
+  PrintLib
+  UefiBootServicesTableLib
+  FsUtilsLib
+  VarStorageUtilsLib
+  ExtHdrUtilsLib
+
+[Guids]
+  gTokenSelectCertVarGuid
+
+[Protocols]
+  gOpenSSLProtocolGuid
+
+[Pcd]
+
+

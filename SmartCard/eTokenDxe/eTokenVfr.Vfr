@@ -1,0 +1,25 @@
+/*
+
+**/
+
+#include "eTokenVfrData.h"
+
+#define EFI_INPUT_DEVICE_CLASS            0x08
+
+
+formset 
+  guid      = ETOKEN_VFR_GUID,
+  title     = STRING_TOKEN(STR_ETOKEN_TITLE),  
+  help      = STRING_TOKEN(STR_EMPTY_STRING), 
+  class     = EFI_INPUT_DEVICE_CLASS,
+  subclass  = 0,
+  
+  form formid = 0x1000,
+    title = STRING_TOKEN(STR_ETOKEN_TITLE);
+    subtitle text = STRING_TOKEN(STR_ETOKEN_TITLE);
+
+    label START_LABEL_ID;
+    label END_LABEL_ID;  
+  endform;
+  
+endformset;

@@ -1,0 +1,64 @@
+## @file
+# EFI/Framework Emulation Platform with UEFI HII interface supported.
+#
+# The Emulation Platform can be used to debug individual modules, prior to creating
+#    a real platform. This also provides an example for how an DSC is created.
+#
+# Copyright (c) 2006 - 2011, Intel Corporation. All rights reserved.<BR>
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = LdapDxe
+  FILE_GUID                      = 32f3025b-1eb3-494d-a610-1e756ad39f47
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = LdapDxeInit
+   
+[Sources]
+  LdapDxeInternal.h
+  LdapDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  StdLib/StdLib.dec
+  OpenLDAP/OpenLDAP.dec
+  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
+  CommonPkg/CommonPkg.dec
+  ApplicationPkg/ApplicationPkg.dec
+
+[LibraryClasses]
+  UefiLib
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  PrintLib
+  DebugLib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  LdapCommon
+  FileDescInitLib
+  DevFV
+  DevEfiVar
+  DevCertStorage
+  FsUtilsLib
+  CommonUtilsLib
+  
+[Protocols]
+  gLdapProtocolGuid       ## PRODUCES
+
+[Depex]
+  TRUE
+
+[Guids]
+
+[Pcd]

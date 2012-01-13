@@ -1,0 +1,100 @@
+//** @file
+// 
+//**/
+
+#include "vfrdata.h"
+
+formset
+  guid     = FORMSET_GUID,
+  title    = STRING_TOKEN(STR_MULTIBOOT_TITLE),
+  help     = STRING_TOKEN(STR_MULTIBOOT_HELP),
+  class    = NON_DEVICE,
+  subclass = GENERAL_APPLICATION,
+
+  varstore MULTIBOOT_MODULE_VFR,        // Define referenced name in vfr
+  	name      = MultibootModuleData,   // 
+	guid      = FORMSET_GUID;          // 
+
+  varstore MULTIBOOT_ENTRY_VFR,         // Define referenced name in vfr
+        name      = MultibootEntryData,    // 
+	guid      = FORMSET_GUID;          // 
+
+ form formid = MULTIBOOT_MAIN_PAGE_FORM_ID,
+    title = STRING_TOKEN(STR_MULTIBOOT_MAIN_PAGE_TITLE);
+
+    //
+    // This is where we will dynamically add choices for the Boot Manager
+    //
+
+    label LABEL_BOOT_OPTION;
+    label LABEL_BOOT_OPTION_END;
+
+    //
+    //
+    //
+
+    subtitle text = STRING_TOKEN(STR_MULTIBOOT_MAIN_PAGE_HELP);
+
+  endform;
+
+  form formid = MULTIBOOT_ENTRY_EDIT_FORM_ID,
+    title = STRING_TOKEN(STR_MULTIBOOT_ENTRY_EDIT_TITLE);
+
+ 
+    string
+      varid   = MultibootEntryData.Name,
+      questionid = MULTIBOOT_ENTRY_EDIT_NAME_ID,
+      prompt  = STRING_TOKEN(STR_MULTIBOOT_EDIT_ENTRY_DESC),
+      help    = STRING_TOKEN(STR_MULTIBOOT_NULL_STRING),
+      minsize = 0,
+      maxsize = MULTIBOOT_MAX_STRING,
+    endstring;
+
+    subtitle text = STRING_TOKEN(STR_MULTIBOOT_NULL_STRING);
+
+    label LABEL_MODULE_LIST_START;
+    label LABEL_MODULE_LIST_END;
+
+  endform;
+
+  form formid = MULTIBOOT_MODULE_EDIT_FORM_ID,
+    title = STRING_TOKEN(STR_MULTIBOOT_MODULE_EDIT_TITLE);
+
+    string
+      varid   = MultibootModuleData.DevPath,
+      prompt  = STRING_TOKEN(STR_MULTIBOOT_OPTION_DESC),
+      help    = STRING_TOKEN(STR_MULTIBOOT_NULL_STRING),
+      minsize = 0,
+      maxsize = MULTIBOOT_MAX_STRING,
+    endstring;
+
+    string
+      varid   = MultibootModuleData.Args,
+      prompt  = STRING_TOKEN(STR_MULTIBOOT_OPTION_DESC),
+      help    = STRING_TOKEN(STR_MULTIBOOT_NULL_STRING),
+      minsize = 0,
+      maxsize = MULTIBOOT_MAX_STRING,
+    endstring; 
+  endform;
+
+  form formid = MULTIBOOT_STRING_REFERENCE_FORM_ID,
+    title = STRING_TOKEN(STR_MULTIBOOT_NULL_STRING);
+    subtitle text = STRING_TOKEN(STR_HASH_ERROR);
+    subtitle text = STRING_TOKEN(STR_HASH_NOT_PRESENT);
+    subtitle text = STRING_TOKEN(STR_BIOS_HASH_CHECK);
+    subtitle text = STRING_TOKEN(STR_FILE_HASH_CHECK);
+    subtitle text = STRING_TOKEN(STR_SUCCESS);
+    subtitle text = STRING_TOKEN(STR_ERROR);
+
+   string
+      varid   = MultibootModuleData.DevPath,
+      prompt  = STRING_TOKEN(STR_DEFAULT_NOT_FOUND),
+      help    = STRING_TOKEN(STR_CONFIG_ERROR),
+      minsize = 0,
+      maxsize = MULTIBOOT_MAX_STRING,
+    endstring;
+
+  endform;
+
+endformset;
+

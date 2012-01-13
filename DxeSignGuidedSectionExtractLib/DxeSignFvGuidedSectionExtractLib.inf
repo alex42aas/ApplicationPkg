@@ -1,0 +1,53 @@
+## @file
+#  This library doesn't produce any library class. The constructor function uses 
+#  ExtractGuidedSectionLib service to register CRC32 guided section handler
+#  that parses CRC32 encapsulation section and extracts raw data.
+#
+#  It uses UEFI boot service CalculateCrc32 to authenticate 32 bit CRC value.
+#
+# Copyright (c) 2006 - 2010, Intel Corporation. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = DxeSignFvGuidedSectionExtractLib
+  FILE_GUID                      = D2C8686E-4AD8-4613-AD7A-9387F3A74027
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = NULL
+
+  CONSTRUCTOR                    = DxeSignFvGuidedSectionExtractLibConstructor
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]
+  DxeSignFvGuidedSectionExtractLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  CommonPkg/CommonPkg.dec
+  ApplicationPkg/ApplicationPkg.dec
+
+[LibraryClasses]
+  ExtractGuidedSectionLib
+  DebugLib
+  BaseMemoryLib
+  Md5Lib
+  Crc32Lib
+  ShaLib
+
+[Guids]
+  gEfiSignFvGuidedSectionExtractionGuid             ## CONSUMES ## GUID
+

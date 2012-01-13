@@ -1,0 +1,24 @@
+///** @file
+//  
+// Pci devices monitor formset.
+//  
+//**/
+#include "PciDefs.h"
+
+formset
+  guid      = FORMSET_GUID,
+  title     = STRING_TOKEN(STR_EQUIPMENT_MONITOR_STRING),
+  help      = STRING_TOKEN(STR_LAST_STRING),
+  classguid = FORMSET_GUID,
+  class     = NON_DEVICE,
+  subclass  = SETUP_APPLICATION,
+
+  form formid = PCI_DEVS_MONITOR_FORM_ID,
+       title  = STRING_TOKEN(STR_EQUIPMENT_MONITOR_STRING);
+
+    label LABEL_DEVICES_MONITOR_OPTION;
+    label LABEL_DEVICES_MONITOR_OPTION_END;
+
+  endform;
+
+endformset;
